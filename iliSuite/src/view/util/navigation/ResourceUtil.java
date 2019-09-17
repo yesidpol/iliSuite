@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import mvc.view.WizardComponent;
 
 public class ResourceUtil {
 
@@ -21,6 +22,21 @@ public class ResourceUtil {
 		Navigable controller = loader.getController();
 		return new VisualResource(component, controller);
 
+	}
+	
+	// FIX merge with loadResource
+	public static Parent loadResource(Class c, EnumPaths path, EnumPaths resourceBundle, WizardComponent viewController) throws IOException {
+		Parent component;
+		FXMLLoader loader;
+		if (resourceBundle != null) {
+			ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle.getPath());
+			loader = new FXMLLoader(c.getResource(path.getPath()), bundle);
+		} else {
+			loader = new FXMLLoader(c.getResource(path.getPath()));
+		}
+		loader.setController(viewController);
+		component = loader.load();
+		return component;
 	}
 
 }

@@ -1,27 +1,24 @@
 package view.general;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 
-import application.data.AppData;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
-import view.common.ili2db.EnumActionIli2Db;
+import mvc.view.WizardComponent;
 import view.util.navigation.EnumPaths;
-import view.util.navigation.Navigable;
-import view.util.navigation.NavigationUtil;
+import view.util.navigation.ResourceUtil;
 
-public class MainOptionsController implements Navigable {
+public class MainOptionsWizard extends WizardComponent {
 
-	private EnumPaths nextPath = null;
-
+	private Parent mainView;
 	@FXML
 	private ResourceBundle applicationBundle;
 
@@ -40,29 +37,47 @@ public class MainOptionsController implements Navigable {
 	private ToggleButton btn_validateData;
 	@FXML
 	private ToggleButton btn_exportData;
-	@FXML
-	private Button btn_cancel;
-	@FXML
-	private Button btn_ok;
 
 	@FXML
 	private Label lbl_helpTitle;
 	@FXML
 	private Text txt_helpContent;
-
-	@FXML
-	public void initialize(/*URL arg0, ResourceBundle arg1*/) {
-
-		applicationBundle = ResourceBundle.getBundle("resources.languages.application");
-
-		AppData data = AppData.getInstance();
-		data.getParamsContainer().getParamsMap().clear();
-
-		NavigationUtil.clearStepStack();
-		addListenerToToggleGroup();
-
+	
+	public MainOptionsWizard() throws IOException {
+		mainView = ResourceUtil.loadResource(getClass(), EnumPaths.MAIN_OPTIONS,
+		EnumPaths.RESOURCE_BUNDLE, this);
+	}
+	
+	@Override
+	public boolean goForward() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
+	@Override
+	public boolean goBack() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean cancel() {
+		return true;
+	}
+
+	@Override
+	public Parent getGui() {
+		return mainView;
+	}
+	
+	// old
+	
+	@FXML
+	public void initialize() {
+		applicationBundle = ResourceBundle.getBundle("resources.languages.application");
+		addListenerToToggleGroup();
+	}
+	
 	private void addListenerToToggleGroup() {
 		tg_mainOptions.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
@@ -70,57 +85,24 @@ public class MainOptionsController implements Navigable {
 				if (newToggle == null) {
 					lbl_helpTitle.setText("");
 					txt_helpContent.setText("");
-					nextPath = null;
 				} else if (newToggle == btn_openUmlEditor) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.openUmlEditor"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.openUmlEditor"));
-					nextPath = EnumPaths.OPEN_UML_EDITOR;
 				} else if (newToggle == btn_generatePhysicalModel) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.generatePhysicalModel"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.generatePhysicalModel"));
-					nextPath = EnumPaths.ILI2DB_COMMON_DATABASE_SELECTION;
-					AppData.getInstance().setActionIli2Db(EnumActionIli2Db.IMPORT_SCHEMA);
-
 				} else if (newToggle == btn_importData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.importOrModifyData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.importOrModifyData"));
-					nextPath = EnumPaths.ILI2DB_COMMON_DATABASE_SELECTION;
-
-					AppData.getInstance().setActionIli2Db(EnumActionIli2Db.IMPORT);
-
 				} else if (newToggle == btn_validateData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.validateData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.validateData"));
-					nextPath = EnumPaths.VAL_DATA_VALIDATE_OPTIONS;
 				} else if (newToggle == btn_exportData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.exportData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.exportData"));
-					nextPath = EnumPaths.ILI2DB_COMMON_DATABASE_SELECTION;
-
-					AppData.getInstance().setActionIli2Db(EnumActionIli2Db.EXPORT);
 				}
+
 			}
 		});
 	}
-
-
-	@Override
-	public boolean validate() {
-		if (tg_mainOptions.getSelectedToggle() == null)
-			return false;
-		else
-			return true;
-
-	}
-
-	@Override
-	public EnumPaths getNextPath() {
-		return nextPath;
-	}
-
-	@Override
-	public boolean isFinalPage() {
-		return false;
-	}
-
 }

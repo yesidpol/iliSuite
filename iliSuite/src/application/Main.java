@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import mvc.controller.MainController;
 import util.exception.IliSuiteSecurityManager;
 import util.plugin.PluginsLoader;
 import view.util.navigation.EnumPaths;
@@ -25,6 +26,8 @@ public class Main extends Application {
 	private final String logDirName = "log";
 	private final String logAppDirName = "log";
 	private final String iliSuiteDirName = ".ilisuite";
+	
+	private MainController mainController = null;
 	
 	@Override
 	public void init() throws InterruptedException {
@@ -59,6 +62,8 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		mainController = new MainController();
 	}
 	
 	public void CreateDirectoryStructureAndFiles(Config config) throws Exception {
@@ -91,30 +96,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-			VisualResource rootLayout = ResourceUtil.loadResource(getClass(), EnumPaths.GENERAL_LAYOUT,
-					EnumPaths.RESOURCE_BUNDLE);
-			NavigationUtil.setMainScreen(rootLayout);
-
-			Scene scene = new Scene(rootLayout.getComponent());
-			scene.getStylesheets().add(getClass().getResource("/resources/css/styles.css").toExternalForm());			
-			primaryStage.setScene(scene);
-			primaryStage.setResizable(false);
-			primaryStage.show();
-			primaryStage.setTitle("iliSuite");
-			
-			List<Image> icons = new ArrayList<Image>();
-			icons.add(new Image(getClass().getResource("/resources/images/icon128.png").toExternalForm()));
-			icons.add(new Image(getClass().getResource("/resources/images/icon64.png").toExternalForm()));
-			icons.add(new Image(getClass().getResource("/resources/images/icon32.png").toExternalForm()));
-			icons.add(new Image(getClass().getResource("/resources/images/icon48.png").toExternalForm()));
-			icons.add(new Image(getClass().getResource("/resources/images/icon16.png").toExternalForm()));
-			
-			
-			primaryStage.getIcons().addAll(icons);
-
-			VisualResource mainOptions = ResourceUtil.loadResource(getClass(), EnumPaths.MAIN_OPTIONS,
-					EnumPaths.RESOURCE_BUNDLE);
-			NavigationUtil.setNextScreen(mainOptions);
+			mainController.startGui(primaryStage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
