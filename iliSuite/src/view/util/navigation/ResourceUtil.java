@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import mvc.view.WizardComponent;
+import mvc.view.BaseItemWizard;
 
 public class ResourceUtil {
 
@@ -25,7 +25,7 @@ public class ResourceUtil {
 	}
 	
 	// FIX merge with loadResource
-	public static Parent loadResource(Class c, EnumPaths path, EnumPaths resourceBundle, WizardComponent viewController) throws IOException {
+	public static Parent loadResource(Class c, EnumPaths path, EnumPaths resourceBundle, Object viewController) throws IOException {
 		Parent component;
 		FXMLLoader loader;
 		if (resourceBundle != null) {

@@ -72,4 +72,23 @@
          </items>
       </SplitPane>
    </center>
+     <bottom>
+        <AnchorPane prefHeight="60.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+           <children>
+              <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+              <HBox alignment="CENTER_RIGHT" layoutX="6.0" layoutY="134.0" prefHeight="50.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <children>
+                    <Button fx:id="btnNext" mnemonicParsing="false" onAction="#goForward" prefHeight="40.0" prefWidth="100.0" text="%buttons.next">
+                       <HBox.margin>
+                          <Insets right="20.0" />
+                       </HBox.margin>
+                    </Button>
+                 </children>
+                 <padding>
+                    <Insets right="10.0" />
+                 </padding>
+              </HBox>
+           </children>
+        </AnchorPane>
+     </bottom>
 </BorderPane>

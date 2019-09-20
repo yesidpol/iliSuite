@@ -20,14 +20,13 @@ import menu.dialog.AboutDialog;
 import menu.dialog.HelpDialog;
 import menu.dialog.PreferencesController;
 import menu.dialog.ProxyDialog;
-import mvc.view.Wizard;
-import mvc.view.WizardComponent;
+import mvc.view.BaseWizard;
+import mvc.view.BaseItemWizard;
 import view.dialog.ModelDirDialog;
 import view.util.navigation.EnumPaths;
-import view.util.navigation.NavigationUtil;
 import view.util.navigation.ResourceUtil;
 
-public class GeneralLayoutWizard extends Wizard implements Initializable {
+public class GeneralLayoutWizard implements Initializable {
 	
 	private Parent mainView;
 	
@@ -39,35 +38,11 @@ public class GeneralLayoutWizard extends Wizard implements Initializable {
 	
 	public GeneralLayoutWizard() throws IOException {
 		mainView = ResourceUtil.loadResource(getClass(), EnumPaths.GENERAL_LAYOUT,
-		EnumPaths.RESOURCE_BUNDLE, this);		
+		EnumPaths.RESOURCE_BUNDLE, this);
 	}
 	
 	public Parent getGui() {
 		return mainView;
-	}
-	
-	@Override
-	protected void setGui(WizardComponent item) {
-		Parent content = item.getGui();
-		if(content != null) {
-			contentPane.setCenter(content);
-		}
-	}
-	
-	@Override
-	public boolean cancel() {
-		// TODO Auto-generated method stub
-		if(super.cancel()) {
-			if(this.index<=0) {
-				Stage s = (Stage) mainView.getScene().getWindow();
-				s.close();
-				return true;
-			} else {
-				this.goBack();
-			}
-		}
-		
-		return true;
 	}
 	
 	/// --- old

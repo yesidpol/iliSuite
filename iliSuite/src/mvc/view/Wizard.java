@@ -1,82 +1,43 @@
 package mvc.view;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
-public abstract class Wizard extends WizardComponent {
-	protected List<WizardComponent> children;
-	protected int index = -1;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.layout.BorderPane;
+import view.util.navigation.EnumPaths;
+import view.util.navigation.ResourceUtil;
+
+public class Wizard extends BaseWizard{
+	private Parent mainView;
+	@FXML
+	private BorderPane contentPane;
 	
-	public Wizard() {
-		children = new ArrayList<WizardComponent>();
+	public Wizard() throws IOException {
+		mainView = ResourceUtil.loadResource(getClass(), EnumPaths.WIZARD_LAYOUT,
+		EnumPaths.RESOURCE_BUNDLE, this);
 	}
 	
-	public Wizard(List<WizardComponent> children) {
-		children = new ArrayList<>(children);
-	}
-	
-	abstract protected void setGui(WizardComponent item);
-	
-	@Override
-	public boolean goForward() {
-		System.out.println("next");
-		
-		int indexNextItem = index + 1;
-		WizardComponent actualItem = null;
-		
-		if (!children.isEmpty() && index>=0 && index < children.size()) {
-			actualItem = children.get(index);
-		}
-			
-		if(actualItem == null || actualItem.goForward()) {
-			if(indexNextItem < children.size()) {
-				WizardComponent nextItem = children.get(indexNextItem);
-				setGui(nextItem);
-				nextItem.onCharged();
-			}
-			index = indexNextItem;
-		}
-		
-		return (index >= children.size());
-	}
-	@Override
-	public boolean goBack() {
-		if(index >= 0) {
-			WizardComponent actualItem = children.get(index);
-			boolean back = actualItem.goBack();
-			if(back) {
-				index--;
-				if(index>=0) {
-					actualItem = children.get(index);
-					setGui(actualItem);
-				}
-			}
-		}
-		
-		return (index == -1);
+	public Parent getGraphicComponent() {
+		return mainView;
 	}
 	
 	@Override
-	public boolean cancel() {
-		WizardComponent actualItem = children.get(index);
-		return actualItem.cancel();
+	protected void drawPage(BaseItemWizard item) {
+		contentPane.setCenter(item.getGraphicComponent());
 	}
 	
-	@Override
-	public void add(WizardComponent item) {
-		children.add(item);
+	@FXML
+	private void btnNextOnAction(ActionEvent e) {
+		this.goForward();
 	}
-	@Override
-	public void remove(WizardComponent item) {
-		children.remove(item);
+	@FXML
+	private void btnBackOnAction(ActionEvent e) {
+		this.goBack();
 	}
-	@Override
-	public void onCharged() {
-		super.onCharged();
-		if(index==-1) {
-			index=0;
-			WizardComponent actualItem = children.get(index);
-			setGui(actualItem);
-		}
+	@FXML
+	private void btnCancelOnAction(ActionEvent e) {
+		this.cancel();
 	}
 }

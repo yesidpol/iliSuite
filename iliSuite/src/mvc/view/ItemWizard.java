@@ -1,28 +1,23 @@
 package mvc.view;
 
-import javafx.scene.Parent;
-
-public class ItemWizard extends WizardComponent {
-
+public abstract class ItemWizard implements BaseItemWizard {
 	@Override
-	public boolean goForward() {
-		return true;
+	public void cancel(WizardArgs args) {	
 	}
-
+	
 	@Override
-	public boolean goBack() {
-		// TODO Auto-generated method stub
-		return true;
+	public void execute(WizardArgs args) {	
 	}
-
+	
 	@Override
-	public boolean cancel() {
-		return true;
+	public void end(WizardArgs args) {	
 	}
-
+	
 	@Override
-	public Parent getGui() {
-		// TODO Auto-generated method stub
-		return null;
+	public void goBack(WizardArgs args) {	
+	}
+	
+	@Override
+	public void goForward(WizardArgs args) {	
 	}
 }

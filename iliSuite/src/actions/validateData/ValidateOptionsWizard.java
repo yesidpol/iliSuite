@@ -1,7 +1,6 @@
 package actions.validateData;
 
 import javafx.scene.Parent;
-import mvc.view.WizardComponent;
 import view.util.navigation.EnumPaths;
 import view.util.navigation.ResourceUtil;
 
@@ -24,10 +23,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import mvc.view.ItemWizard;
+import mvc.view.WizardArgs;
 import javafx.stage.FileChooser.ExtensionFilter;
 import view.dialog.ModelDirDialog;
 
-public class ValidateOptionsWizard extends WizardComponent implements Initializable {
+public class ValidateOptionsWizard extends ItemWizard implements Initializable {
 
 	private Parent mainView;
 
@@ -86,24 +87,14 @@ public class ValidateOptionsWizard extends WizardComponent implements Initializa
 		mainView = ResourceUtil.loadResource(getClass(), EnumPaths.VAL_DATA_VALIDATE_OPTIONS,
 				EnumPaths.RESOURCE_BUNDLE, this);
 	}
+	
 	@Override
-	public boolean goForward() {
-		return validateFields();
+	public void goForward(WizardArgs args) {
+		super.goForward(args);
+		args.setCancel(!validateFields());
 	}
-
 	@Override
-	public boolean goBack() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean cancel() {
-		return true;
-	}
-
-	@Override
-	public Parent getGui() {
+	public Parent getGraphicComponent() {
 		return mainView;
 	}
 

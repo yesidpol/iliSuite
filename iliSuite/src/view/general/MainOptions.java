@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -12,11 +13,12 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
-import mvc.view.WizardComponent;
+import mvc.controller.SelectProcess;
+import mvc.enums.EnumProcess;
 import view.util.navigation.EnumPaths;
 import view.util.navigation.ResourceUtil;
 
-public class MainOptionsWizard extends WizardComponent {
+public class MainOptions {
 
 	private Parent mainView;
 	@FXML
@@ -43,30 +45,16 @@ public class MainOptionsWizard extends WizardComponent {
 	@FXML
 	private Text txt_helpContent;
 	
-	public MainOptionsWizard() throws IOException {
+	private SelectProcess controller;
+	
+	private EnumProcess processSelected;
+	
+	public MainOptions() throws IOException {
 		mainView = ResourceUtil.loadResource(getClass(), EnumPaths.MAIN_OPTIONS,
 		EnumPaths.RESOURCE_BUNDLE, this);
 	}
-	
-	@Override
-	public boolean goForward() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 
-	@Override
-	public boolean goBack() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean cancel() {
-		return true;
-	}
-
-	@Override
-	public Parent getGui() {
+	public Parent getGraphicComponent() {
 		return mainView;
 	}
 	
@@ -76,33 +64,55 @@ public class MainOptionsWizard extends WizardComponent {
 	public void initialize() {
 		applicationBundle = ResourceBundle.getBundle("resources.languages.application");
 		addListenerToToggleGroup();
+		processSelected = null;
+	}
+	
+	public void goForward(ActionEvent e) throws IOException {
+		controller.setProcess(processSelected);
 	}
 	
 	private void addListenerToToggleGroup() {
+		// FIX this list must be into a controller or must supply by a controller
 		tg_mainOptions.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle newToggle) {
 				if (newToggle == null) {
 					lbl_helpTitle.setText("");
 					txt_helpContent.setText("");
+					processSelected = null;
 				} else if (newToggle == btn_openUmlEditor) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.openUmlEditor"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.openUmlEditor"));
+					processSelected = EnumProcess.OPEN_UML_EDITOR;
 				} else if (newToggle == btn_generatePhysicalModel) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.generatePhysicalModel"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.generatePhysicalModel"));
+					processSelected = EnumProcess.SCHEMA_IMPORT;
 				} else if (newToggle == btn_importData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.importOrModifyData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.importOrModifyData"));
+					processSelected = EnumProcess.IMPORT_DATA;
 				} else if (newToggle == btn_validateData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.validateData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.validateData"));
+					processSelected = EnumProcess.VALIDATE_DATA;
 				} else if (newToggle == btn_exportData) {
 					lbl_helpTitle.setText(applicationBundle.getString("main.exportData"));
 					txt_helpContent.setText(applicationBundle.getString("main.content.exportData"));
+					processSelected = EnumProcess.EXPORT_DATA;
 				}
 
 			}
 		});
 	}
+
+	public SelectProcess getController() {
+		return controller;
+	}
+
+	public void setController(SelectProcess controller) {
+		this.controller = controller;
+	}
+
+
 }

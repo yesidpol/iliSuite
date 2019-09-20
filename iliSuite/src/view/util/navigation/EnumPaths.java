@@ -30,7 +30,10 @@ public enum EnumPaths {
 	GENERATEPHYSICALMODEL_ICON("/resources/images/db.png"),
 	IMPORT_ICON("/resources/images/import.png"),
 	VALIDATE_ICON("/resources/images/check.png"),
-	EXPORT_ICON("/resources/images/export.png");
+	EXPORT_ICON("/resources/images/export.png"),
+	
+	WIZARD_LAYOUT("/mvc/view/wizardLayout.fxml")
+	;
 	
 	private final String path;
 	
