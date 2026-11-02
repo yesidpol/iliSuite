@@ -28,7 +28,7 @@
    <left>
       <ImageView fitWidth="264.0" pickOnBounds="true" preserveRatio="true" style="-fx-background: #FFFFFF;" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../../resources/images/logoSecoProject.png" />
+            <Image url="@../../resources/images/logoLeft.png" />
          </image>
       </ImageView>
    </left>
