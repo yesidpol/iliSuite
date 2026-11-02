@@ -66,11 +66,10 @@ public class GeneratePhysicalModelController extends IliController implements Db
 		
 		String basePath = "programs/ili2db/";
 		String AppNameAndVersion = dbDesc.getAppName() + "-" + dbDesc.getAppVersion(); 
-		String javaExec = "java -jar";
 		
 		File file = new File(basePath + AppNameAndVersion + ".jar");
 		
-		return javaExec + " \"" + file.getAbsolutePath() + "\"";
+		return file.getAbsolutePath();
 	}
 
 	@Override

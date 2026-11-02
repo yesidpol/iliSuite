@@ -51,8 +51,13 @@ public class IliExec {
 
 	public void exec(String[] params) {
 		try {
+			String[] fullCommand = new String[params.length + 3];
+			fullCommand[0] = "java";
+			fullCommand[1] = "-jar";
+			fullCommand[2] = app;
+			System.arraycopy(params, 0, fullCommand, 3, params.length);
 			
-			proc = Runtime.getRuntime().exec(app + " " +  String.join(" ",params));
+			proc = Runtime.getRuntime().exec(fullCommand);
 			
             ExecutableStream errorStream = new 
                     ExecutableStream(proc.getErrorStream(), true);            

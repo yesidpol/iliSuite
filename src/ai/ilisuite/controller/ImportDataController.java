@@ -68,11 +68,10 @@ public class ImportDataController extends IliController implements DbSelectorCon
 		
 		String basePath = "programs/ili2db/";
 		String AppNameAndVersion = dbDesc.getAppName() + "-" + dbDesc.getAppVersion(); 
-		String javaExec = "java -jar";
 		
 		File file = new File(basePath + AppNameAndVersion + ".jar");
 		
-		return javaExec + " \"" + file.getAbsolutePath() + "\"";
+		return file.getAbsolutePath();
 	}
 
 	@Override

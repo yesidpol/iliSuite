@@ -23,7 +23,7 @@ public class ValidateDataController extends IliController {
 		
 		File file = new File("programs/ilivalidator-" + ilivalidatorVersion + 
 				"-bindist/ilivalidator-" + ilivalidatorVersion + ".jar");
-		return "java -jar  \"" + file.getAbsolutePath() + "\"";
+		return file.getAbsolutePath();
 	}
 
 	@Override
