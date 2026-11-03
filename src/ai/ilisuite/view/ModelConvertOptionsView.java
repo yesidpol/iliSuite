@@ -295,7 +295,8 @@ public class ModelConvertOptionsView extends StepViewController implements Initi
 		chk_createGeomIdx.setSelected(true);
 		chk_createFkIdx.setSelected(true);
 		chk_createMetaInfo.setSelected(true);
-		tf_srsCode.setText("3116");
+		tf_srsCode.setText("9377");
+		chk_createBasketCol.setSelected(true);
 	}
 	
 	private boolean validateFields(){
