@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.ilisuite.application.data.Config;
 import ai.ilisuite.base.log.IliAppStreamProcessor;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,11 +52,30 @@ public class IliExec {
 
 	public void exec(String[] params) {
 		try {
-			String[] fullCommand = new String[params.length + 3];
+			Config config = Config.getInstance();
+			Integer maxMemoryMB = config.getMaxMemoryMB();
+			
+			int commandSize = params.length + 3;
+			int commandIndex = 3;
+			
+			if(maxMemoryMB != null && maxMemoryMB > 0) {
+				commandSize++;
+				commandIndex = 4;
+			}
+			
+			String[] fullCommand = new String[commandSize];
 			fullCommand[0] = "java";
-			fullCommand[1] = "-jar";
-			fullCommand[2] = app;
-			System.arraycopy(params, 0, fullCommand, 3, params.length);
+			
+			if(maxMemoryMB != null && maxMemoryMB > 0) {
+				fullCommand[1] = "-Xmx" + maxMemoryMB + "m";
+				fullCommand[2] = "-jar";
+				fullCommand[3] = app;
+			} else {
+				fullCommand[1] = "-jar";
+				fullCommand[2] = app;
+			}
+			
+			System.arraycopy(params, 0, fullCommand, commandIndex, params.length);
 			
 			proc = Runtime.getRuntime().exec(fullCommand);
 			

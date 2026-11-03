@@ -16,9 +16,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -51,6 +55,18 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 	
 	@FXML
 	Button btn_logDirBrowse;
+	
+	@FXML
+	CheckBox chk_maxMemoryEnabled;
+	
+	@FXML
+	Slider slider_maxMemory;
+	
+	@FXML
+	Label lbl_maxMemory;
+	
+	@FXML
+	Label lbl_maxMemoryValue;
 	
 	private ResourceBundle resourceBundle;
 	
@@ -94,6 +110,34 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 		
 		txt_logDirPath.setDisable(!config.isLogEnabled());
 		
+		OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+		long totalPhysicalMemoryMB = osBean.getTotalPhysicalMemorySize() / (1024 * 1024);
+		long maxAllowedMemory = (long)(totalPhysicalMemoryMB * 0.75);
+		
+		slider_maxMemory.setMin(2000);
+		slider_maxMemory.setMax(maxAllowedMemory);
+		slider_maxMemory.setBlockIncrement(500);
+		slider_maxMemory.setMajorTickUnit(2000);
+		slider_maxMemory.setMinorTickCount(4);
+		
+		Integer maxMemory = config.getMaxMemoryMB();
+		boolean maxMemorySet = maxMemory != null && maxMemory > 0;
+		
+		chk_maxMemoryEnabled.setSelected(maxMemorySet);
+		setMaxMemoryControlsDisabled(!maxMemorySet);
+		
+		if(maxMemorySet) {
+			slider_maxMemory.setValue(maxMemory);
+		} else {
+			slider_maxMemory.setValue(maxAllowedMemory);
+		}
+		
+		lbl_maxMemoryValue.setText(String.format("%.0f MB", slider_maxMemory.getValue()));
+		
+		slider_maxMemory.valueProperty().addListener((observable, oldValue, newValue) -> {
+			lbl_maxMemoryValue.setText(String.format("%.0f MB", newValue.doubleValue()));
+		});
+		
 		this.setResultConverter(new Callback<ButtonType, Boolean>() {
 			@Override
 			public Boolean call(ButtonType b) {
@@ -105,9 +149,14 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 					}
 					
 					config.setLogEnabled(chk_logEnabled.isSelected());
-					// TODO Check if directory exist
 					if(chk_logEnabled.isSelected()) {
 						config.setLogDir(txt_logDirPath.getText());
+					}
+					
+					if(chk_maxMemoryEnabled.isSelected()) {
+						config.setMaxMemoryMB((int)slider_maxMemory.getValue());
+					} else {
+						config.setMaxMemoryMB(null);
 					}
 					try {
 						config.saveToFile();
@@ -146,5 +195,16 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 	void onAction_chk_logEnabled(ActionEvent e){
 		txt_logDirPath.setDisable(!chk_logEnabled.isSelected());
 		btn_logDirBrowse.setDisable(!chk_logEnabled.isSelected());
+	}
+	
+	@FXML
+	void onAction_chk_maxMemoryEnabled(ActionEvent e){
+		setMaxMemoryControlsDisabled(!chk_maxMemoryEnabled.isSelected());
+	}
+	
+	private void setMaxMemoryControlsDisabled(boolean disabled){
+		lbl_maxMemory.setDisable(disabled);
+		lbl_maxMemoryValue.setDisable(disabled);
+		slider_maxMemory.setDisable(disabled);
 	}
 }

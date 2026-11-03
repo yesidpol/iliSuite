@@ -18,6 +18,7 @@ public class Config {
 	private boolean traceEnabled;
 	private boolean logEnabled;
 	private String logDir;
+	private Integer maxMemoryMB;
 
 	private String iliSuiteDir;
 	private String configFileName;
@@ -80,6 +81,14 @@ public class Config {
 		logEnabled = strLogEnabled.equals("true");
 
 		logDir = properties.getProperty("logDir") != null? properties.getProperty("logDir") : logDir;
+		
+		Integer intMaxMemory = null;
+		try {
+			intMaxMemory = Integer.valueOf(properties.getProperty("maxMemoryMB"));
+		} catch (NumberFormatException E) {
+			//
+		}
+		maxMemoryMB = intMaxMemory;
 	}
 
 	public void saveToFile() throws IOException {
@@ -104,6 +113,10 @@ public class Config {
 
 		if (logDir != null && !logDir.isEmpty()) {
 			properties.setProperty("logDir", logDir);
+		}
+		
+		if (maxMemoryMB != null && maxMemoryMB > 0) {
+			properties.setProperty("maxMemoryMB", String.valueOf(maxMemoryMB));
 		}
 
 		File file = new File(getConfigPath());
@@ -147,6 +160,10 @@ public class Config {
 	public String getLogAppDir() {
 		return logAppDir;
 	}
+	
+	public Integer getMaxMemoryMB() {
+		return maxMemoryMB;
+	}
 
 	public void setModelDir(String modelDir) {
 		this.modelDir = modelDir;
@@ -186,6 +203,10 @@ public class Config {
 
 	public void setLogAppDir(String logAppDir) {
 		this.logAppDir = logAppDir;
+	}
+	
+	public void setMaxMemoryMB(Integer maxMemoryMB) {
+		this.maxMemoryMB = maxMemoryMB;
 	}
 
 	public String getConfigPath() {
