@@ -19,10 +19,10 @@ public class PluginsLoader {
 
 	public static void Load() {
 		ImplFactory[] lstIplug = new ImplFactory[] {
-				new Ili2fgdbImpl(),
+				// new Ili2fgdbImpl(),
 				new Ili2gpkgImpl(),
 				new Ili2MsSqlImpl(),
-				new Ili2oraImpl(),
+				// new Ili2oraImpl(),
 				new Ili2pgImpl()};
 
 		for(ImplFactory iplug:lstIplug) {
