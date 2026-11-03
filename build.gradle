@@ -122,7 +122,7 @@ task generateVersions {
 		versionProps.setProperty('umlEditorVersion', "$umlEditorVersion")
 		versionProps.setProperty('ilivalidatorVersion', "$ilivalidatorVersion")
 
-		def versionPropsFile = new File("src/ai/ilisuite/application/Version.properties")
+		def versionPropsFile = project.file("src/ai/ilisuite/application/Version.properties")
 		versionPropsFile.getParentFile().mkdirs();
 		def writer = versionPropsFile.newWriter()
 		versionProps.store(writer, null);
@@ -134,7 +134,7 @@ task generateVersions {
 			def path = "src_supported_impls/ili2$app" + 
 					"Impl/src/ai/ilisuite/impl/ili2$app/Version.properties"
 			 
-			def versionPropsFile2 = new File(path)
+			def versionPropsFile2 = project.file(path)
 			versionPropsFile2.getParentFile().mkdirs();
 			def writer2 = versionPropsFile2.newWriter()
 			versionIli2dbs.store(writer2, null);
@@ -189,11 +189,10 @@ task cpDistFiles(dependsOn: [mainJar, copyPrograms], type: Copy){
 	from(configurations.runtimeClasspath){
 		into 'ilisuite_lib'
 	}
-	// others
-	from("docs/iliSuite_help_es.pdf")
 	from ("$projectDir") {
-		include "help/**", "programs/**", '.defaultConfig.properties'
+		include "programs/**", '.defaultConfig.properties'
 	}
+	// others
 	from ("libs") {
 		into 'programs/ili2db/libs'
 	}
