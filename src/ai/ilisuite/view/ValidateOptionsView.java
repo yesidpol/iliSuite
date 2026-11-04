@@ -13,6 +13,7 @@ import ai.ilisuite.application.data.Config;
 import ai.ilisuite.controller.ParamsController;
 import ai.ilisuite.util.params.EnumParams;
 import ai.ilisuite.view.dialog.ModelDirDialog;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.EnumPaths;
 import ai.ilisuite.view.util.navigation.ResourceUtil;
 import ai.ilisuite.view.wizard.StepArgs;
@@ -27,8 +28,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
@@ -198,18 +197,14 @@ public class ValidateOptionsView extends StepViewController implements Initializ
 	
 	@FXML
 	public void onClickBtnBrowseXtfFile(ActionEvent event) throws IOException {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters()
-				.addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"));
-		fileChooser.getExtensionFilters()
-				.addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.itf"), "*.itf"));
-
 		// TODO Verificar si el campo de texto con el archivo xtf debe ser de
 		// solo lectura
 		// TODO Verificar si el t�tulo corresponde
-		fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
 		Window window = ((Node) event.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showOpenDialog(window);
+		File selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_XTF,
+				applicationBundle.getString("general.file.choose"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.itf"), "*.itf"));
 		if (selectedFile != null)
 			tf_XtfFile.setText(selectedFile.getAbsolutePath());
 	}
@@ -243,15 +238,12 @@ public class ValidateOptionsView extends StepViewController implements Initializ
 	}
 
 	public void onClickBtnBrowsePluginsFolder(ActionEvent event) {
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-
 		// TODO Verificar si el campo de texto con la carpeta de plugins debe
 		// ser de solo lectura
 		// TODO Ajustar el texto de la ventana (dircetoryChoser plugins)
-		directoryChooser.setTitle(applicationBundle.getString("general.file.choose"));
-
 		Window window = ((Node) event.getSource()).getScene().getWindow();
-		File selectedDirectory = directoryChooser.showDialog(window);
+		File selectedDirectory = FileChooserHelper.showDirectoryDialog(window,
+				FileChooserHelper.CAT_PLUGINS_DIR, applicationBundle.getString("general.file.choose"));
 
 		if (selectedDirectory != null) {
 			tf_pluginsFolder.setText(selectedDirectory.getAbsolutePath());
@@ -283,16 +275,12 @@ public class ValidateOptionsView extends StepViewController implements Initializ
 	}
 
 	public void onClickBtnBrowseConfigFile(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(
+		// TODO Validar titulo
+		Window window = ((Node) event.getSource()).getScene().getWindow();
+		File selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_TOML,
+				applicationBundle.getString("general.file.choose"),
 				new ExtensionFilter(applicationBundle.getString("general.file.extension.toml"), "*.toml"),
 				new ExtensionFilter(applicationBundle.getString("general.file.extension.all"), "*.*"));
-
-		// TODO Validar titulo
-		fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
-
-		Window window = ((Node) event.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showOpenDialog(window);
 
 		if (selectedFile != null) {
 			tf_configFile.setText(selectedFile.getAbsolutePath());
@@ -300,15 +288,11 @@ public class ValidateOptionsView extends StepViewController implements Initializ
 	}
 
 	public void onClickBtnBrowseLogXtfFile(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters()
-				.addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"));
-
 		// TODO Validar titulo
-		fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
-
 		Window window = ((Node) event.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showSaveDialog(window);
+		File selectedFile = FileChooserHelper.showSaveDialog(window, FileChooserHelper.CAT_XTF_LOG,
+				applicationBundle.getString("general.file.choose"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"));
 
 		if (selectedFile != null) {
 			tf_logXtfFile.setText(selectedFile.getAbsolutePath());

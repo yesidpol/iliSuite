@@ -17,6 +17,7 @@ import ai.ilisuite.util.params.EnumParams;
 import ai.ilisuite.util.procedures.ModelSearch;
 import ai.ilisuite.view.dialog.ModelDirDialog;
 import ai.ilisuite.view.dialog.MultipleSelectionDialog;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.EnumPaths;
 import ai.ilisuite.view.util.navigation.ResourceUtil;
 import ai.ilisuite.view.wizard.StepArgs;
@@ -35,7 +36,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
@@ -243,11 +243,10 @@ public class ImportDataOptionsView extends StepViewController implements Initial
 
 	@FXML
 	private void handleBrowseXtfFile(ActionEvent e) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"));
-		fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
 		Window window = ((Node) e.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showOpenDialog(window);
+		File selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_XTF,
+				applicationBundle.getString("general.file.choose"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.xtf"), "*.xtf"));
 		if (selectedFile != null)
 			tf_xtfPath.setText(selectedFile.getAbsolutePath());
 	}
@@ -299,16 +298,12 @@ public class ImportDataOptionsView extends StepViewController implements Initial
 	
 	@FXML
 	private void handleBrowseValidConfigFile(ActionEvent e){
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(
+		// TODO Validar titulo
+		Window window = ((Node) e.getSource()).getScene().getWindow();
+		File selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_TOML,
+				applicationBundle.getString("general.file.choose"),
 				new ExtensionFilter(applicationBundle.getString("general.file.extension.toml"), "*.toml"),
 				new ExtensionFilter(applicationBundle.getString("general.file.extension.all"), "*.*"));
-
-		// TODO Validar titulo
-		fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
-
-		Window window = ((Node) e.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showOpenDialog(window);
 
 		if (selectedFile != null) {
 			tf_validConfigFile.setText(selectedFile.getAbsolutePath());

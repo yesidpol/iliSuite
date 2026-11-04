@@ -18,6 +18,7 @@ import ai.ilisuite.util.params.EnumParams;
 import ai.ilisuite.util.procedures.ModelSearch;
 import ai.ilisuite.view.dialog.ModelDirDialog;
 import ai.ilisuite.view.dialog.MultipleSelectionDialog;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.EnumPaths;
 import ai.ilisuite.view.util.navigation.ResourceUtil;
 import ai.ilisuite.view.wizard.StepArgs;
@@ -37,7 +38,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
@@ -325,21 +325,19 @@ public class ModelConvertOptionsView extends StepViewController implements Initi
 	
 	public void onClickBrowseCreateScript(ActionEvent e){
 		
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.sql"),"*.sql"));
-		fileChooser.setTitle(applicationBundle.getString("general.file.saveAs"));
 		Window window = ((Node)e.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showSaveDialog(window);
+		File selectedFile = FileChooserHelper.showSaveDialog(window, FileChooserHelper.CAT_SQL,
+				applicationBundle.getString("general.file.saveAs"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.sql"),"*.sql"));
 		if(selectedFile!=null)
 			tf_createScriptPath.setText(selectedFile.getAbsolutePath());
 	}
 	
 	public void onClickBrowseDropScript(ActionEvent e){
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.sql"),"*.sql"));
-		fileChooser.setTitle(applicationBundle.getString("general.file.saveAs"));
 		Window window = ((Node)e.getSource()).getScene().getWindow();
-		File selectedFile = fileChooser.showSaveDialog(window);
+		File selectedFile = FileChooserHelper.showSaveDialog(window, FileChooserHelper.CAT_SQL,
+				applicationBundle.getString("general.file.saveAs"),
+				new ExtensionFilter(applicationBundle.getString("general.file.extension.sql"),"*.sql"));
 		if(selectedFile!=null)
 			tf_dropScriptPath.setText(selectedFile.getAbsolutePath());
 	}
@@ -348,11 +346,10 @@ public class ModelConvertOptionsView extends StepViewController implements Initi
 			tf_modelDir.setStyle(null);
 		if(radio_inputFile.isSelected()) {
 			
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter(applicationBundle.getString("general.file.extension.ili"), "*.ili"));
-			fileChooser.setTitle(applicationBundle.getString("general.file.choose"));
 			Window window = ((Node)e.getSource()).getScene().getWindow();
-			File selectedFile = fileChooser.showOpenDialog(window);
+			File selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_ILI,
+					applicationBundle.getString("general.file.choose"),
+					new ExtensionFilter(applicationBundle.getString("general.file.extension.ili"), "*.ili"));
 			if(selectedFile!=null)
 				tf_iliFilePath.setText(selectedFile.getAbsolutePath());
 		}else if(radio_inputModels.isSelected()) {

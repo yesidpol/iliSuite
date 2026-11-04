@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.EnumPaths;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
 
@@ -64,11 +64,11 @@ public class EditItemDialog extends Dialog<String> {
 		Node eventSource = (Node) event.getSource();
 		Window ownerWindow = eventSource.getScene().getWindow();
 
-		DirectoryChooser directoryChooser = new DirectoryChooser();
+		File dir = txtValue.getText() != null && !txtValue.getText().isEmpty()
+				? new File(txtValue.getText()) : null;
 
-		directoryChooser.setTitle(resourceBundle.getString("dialog.editItem.selectFolder"));
-
-		File selectedDirectory = directoryChooser.showDialog(ownerWindow);
+		File selectedDirectory = FileChooserHelper.showDirectoryDialog(ownerWindow,
+				FileChooserHelper.CAT_MODEL_DIR, resourceBundle.getString("dialog.editItem.selectFolder"), dir);
 
 		if (selectedDirectory != null) {
 			txtValue.setText(selectedDirectory.getAbsolutePath());

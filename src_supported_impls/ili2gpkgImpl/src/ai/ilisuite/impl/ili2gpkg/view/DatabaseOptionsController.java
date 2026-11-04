@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import ai.ilisuite.impl.controller.IController;
 import ai.ilisuite.impl.dbconn.AbstractConnection;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.ResourceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +21,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
@@ -89,20 +89,18 @@ public class DatabaseOptionsController implements IController, Initializable {
 
 	public void onClickBrowse(ActionEvent e) {
 
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters()
-				.addAll(new ExtensionFilter(applicationBundle.getString("datafile.extension.xtf"), "*.gpkg"));
-
 		Window window = ((Node) e.getSource()).getScene().getWindow();
+
+		ExtensionFilter filter = new ExtensionFilter(applicationBundle.getString("datafile.extension.xtf"), "*.gpkg");
 
 		File selectedFile = null;
 
 		if (createSchema) {
-			fileChooser.setTitle(applicationBundle.getString("datafile.saveAs"));
-			selectedFile = fileChooser.showSaveDialog(window);
+			selectedFile = FileChooserHelper.showSaveDialog(window, FileChooserHelper.CAT_GPKG,
+					applicationBundle.getString("datafile.saveAs"), filter);
 		} else {
-			fileChooser.setTitle(applicationBundle.getString("datafile.choose"));
-			selectedFile = fileChooser.showOpenDialog(window);
+			selectedFile = FileChooserHelper.showOpenDialog(window, FileChooserHelper.CAT_GPKG,
+					applicationBundle.getString("datafile.choose"), filter);
 		}
 
 		if (selectedFile != null)

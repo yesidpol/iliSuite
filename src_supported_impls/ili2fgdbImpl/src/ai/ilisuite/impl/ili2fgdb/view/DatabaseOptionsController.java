@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import ai.ilisuite.impl.controller.IController;
 import ai.ilisuite.impl.dbconn.AbstractConnection;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.ResourceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,8 +21,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -93,15 +92,11 @@ public class DatabaseOptionsController implements IController, Initializable {
 		File selectedFolder = null;
 
 		if (createSchema) {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("gdb","*.gdb"));
-			fileChooser.setTitle(applicationBundle.getString("datafolder.choose"));
-			
-			selectedFolder = fileChooser.showSaveDialog(window);
+			selectedFolder = FileChooserHelper.showSaveDialog(window, FileChooserHelper.CAT_GDB,
+					applicationBundle.getString("datafolder.choose"), new ExtensionFilter("gdb","*.gdb"));
 		} else {
-			DirectoryChooser folderChooser = new DirectoryChooser();
-			folderChooser.setTitle(applicationBundle.getString("datafolder.choose"));
-			selectedFolder = folderChooser.showDialog(window);
+			selectedFolder = FileChooserHelper.showDirectoryDialog(window, FileChooserHelper.CAT_GDB,
+					applicationBundle.getString("datafolder.choose"));
 		}
 
 		if (selectedFolder != null)

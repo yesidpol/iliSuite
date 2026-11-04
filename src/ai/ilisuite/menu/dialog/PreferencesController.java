@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ai.ilisuite.application.data.Config;
+import ai.ilisuite.view.util.FileChooserHelper;
 import ai.ilisuite.view.util.navigation.EnumPaths;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +25,6 @@ import javafx.scene.control.ToggleGroup;
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
 
@@ -111,7 +111,7 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 		txt_logDirPath.setDisable(!config.isLogEnabled());
 		
 		OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-		long totalPhysicalMemoryMB = osBean.getTotalPhysicalMemorySize() / (1024 * 1024);
+		long totalPhysicalMemoryMB = osBean.getTotalMemorySize() / (1024 * 1024);
 		long maxAllowedMemory = (long)(totalPhysicalMemoryMB * 0.75);
 		
 		slider_maxMemory.setMin(2000);
@@ -174,17 +174,10 @@ public class PreferencesController extends Dialog<Boolean> implements Initializa
 		Node eventSource = (Node) event.getSource();
 		Window ownerWindow = eventSource.getScene().getWindow();
 
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-
-		directoryChooser.setTitle(resourceBundle.getString("dialog.preferences.title"));
-
 		File dir = new File(txt_logDirPath.getText());
-		
-		if(dir.isDirectory() && dir.exists()) {
-			directoryChooser.setInitialDirectory(dir);
-		}
-		
-		File selectedDirectory = directoryChooser.showDialog(ownerWindow);
+
+		File selectedDirectory = FileChooserHelper.showDirectoryDialog(ownerWindow,
+				FileChooserHelper.CAT_LOG_DIR, resourceBundle.getString("dialog.preferences.title"), dir);
 
 		if (selectedDirectory != null) {
 			txt_logDirPath.setText(selectedDirectory.getAbsolutePath());
