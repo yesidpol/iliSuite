@@ -50,34 +50,37 @@ public class IliExec {
 			listener.finishWriting();
 	}
 
+	public static String[] buildFullCommand(String app, String[] params) {
+		Config config = Config.getInstance();
+		Integer maxMemoryMB = config.getMaxMemoryMB();
+
+		int commandSize = params.length + 3;
+		int commandIndex = 3;
+
+		if(maxMemoryMB != null && maxMemoryMB > 0) {
+			commandSize++;
+			commandIndex = 4;
+		}
+
+		String[] fullCommand = new String[commandSize];
+		fullCommand[0] = "java";
+
+		if(maxMemoryMB != null && maxMemoryMB > 0) {
+			fullCommand[1] = "-Xmx" + maxMemoryMB + "m";
+			fullCommand[2] = "-jar";
+			fullCommand[3] = app;
+		} else {
+			fullCommand[1] = "-jar";
+			fullCommand[2] = app;
+		}
+
+		System.arraycopy(params, 0, fullCommand, commandIndex, params.length);
+		return fullCommand;
+	}
+
 	public void exec(String[] params) {
 		try {
-			Config config = Config.getInstance();
-			Integer maxMemoryMB = config.getMaxMemoryMB();
-			
-			int commandSize = params.length + 3;
-			int commandIndex = 3;
-			
-			if(maxMemoryMB != null && maxMemoryMB > 0) {
-				commandSize++;
-				commandIndex = 4;
-			}
-			
-			String[] fullCommand = new String[commandSize];
-			fullCommand[0] = "java";
-			
-			if(maxMemoryMB != null && maxMemoryMB > 0) {
-				fullCommand[1] = "-Xmx" + maxMemoryMB + "m";
-				fullCommand[2] = "-jar";
-				fullCommand[3] = app;
-			} else {
-				fullCommand[1] = "-jar";
-				fullCommand[2] = app;
-			}
-			
-			System.arraycopy(params, 0, fullCommand, commandIndex, params.length);
-			
-			proc = Runtime.getRuntime().exec(fullCommand);
+			proc = Runtime.getRuntime().exec(buildFullCommand(app, params));
 			
             ExecutableStream errorStream = new 
                     ExecutableStream(proc.getErrorStream(), true);            

@@ -93,9 +93,9 @@ public class FinishActionView  extends StepViewController  implements Initializa
 		childrenIssues.add(warnings);
 		childrenIssues.add(others);
 		
-		commandText = "";
 		summary = "";
-		registerReport.setText(summary);
+		processTree.getSelectionModel().clearSelection();
+		processTree.getSelectionModel().select(command);
 	}
 	
 	@Override
@@ -136,7 +136,7 @@ public class FinishActionView  extends StepViewController  implements Initializa
         	} else if (newValue == registerReportNode) {
         		registerReportText = summary;
         		isInfoPanelVisible = true;
-        	} else {
+        	} else if (newValue != null) {
         		TreeItem<String> parent = newValue.getParent();
         		if(parent != null) {
         			TreeItem<String> grantParent = parent.getParent();
@@ -169,6 +169,7 @@ public class FinishActionView  extends StepViewController  implements Initializa
 	public void loadedPage(StepArgs args) {
 		super.loadedPage(args);
 		commandText = controller.getTextParams();
+		processTree.getSelectionModel().select(command);
 	}
 
 	@Override

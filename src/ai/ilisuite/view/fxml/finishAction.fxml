@@ -5,7 +5,8 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -23,15 +24,19 @@
       </AnchorPane>
    </top>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <GridPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="75" />
+         </columnConstraints>
          <children>
-            <TreeView fx:id="processTree" prefHeight="282.0" prefWidth="531.0" />
-            <AnchorPane fx:id="infoPanel" visible="false">
+            <TreeView fx:id="processTree" prefHeight="282.0" GridPane.columnIndex="0" />
+            <AnchorPane fx:id="infoPanel" visible="false" GridPane.columnIndex="1">
                <children>
                   <TextArea fx:id="registerReport" editable="false" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>
-      </HBox>
+      </GridPane>
    </center>
 </BorderPane>

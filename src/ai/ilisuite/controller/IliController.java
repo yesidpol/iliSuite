@@ -2,6 +2,7 @@ package ai.ilisuite.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,8 +86,10 @@ public abstract class IliController implements ParamsController, IliMessageRecei
 
 	public String getTextParams() {
 		List<String> command = getCommand();
+		String[] fullCommand = IliExec.buildFullCommand(
+				getExecutablePath(), command.toArray(new String[] {}));
 		
-		return getExecutablePath() + " " + ParamsUtil.getStringArgs(command, true);
+		return ParamsUtil.getStringArgs(Arrays.asList(fullCommand), true);
 	}
 
 	@Override
